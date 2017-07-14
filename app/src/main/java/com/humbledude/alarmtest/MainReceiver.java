@@ -12,10 +12,15 @@ import android.util.Log;
 public class MainReceiver extends BroadcastReceiver {
     private static final String TAG = MainReceiver.class.getSimpleName();
 
+    public static String valTest = "";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(TAG, "onReceive");
+        Log.e(TAG, "onReceive : " + intent.toString());
 
+        if (intent.hasExtra("key_test")) {
+            valTest = intent.getStringExtra("key_test");
+            Log.e(TAG, "key_test : " + valTest);
+        }
     }
 }

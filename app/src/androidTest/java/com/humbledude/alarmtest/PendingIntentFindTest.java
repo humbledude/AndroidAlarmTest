@@ -17,9 +17,9 @@ import static junit.framework.Assert.*;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class PendingIntentTest {
+public class PendingIntentFindTest {
 
-    private static final String TAG = PendingIntentTest.class.getSimpleName();
+    private static final String TAG = PendingIntentFindTest.class.getSimpleName();
     private Context context;
     private Intent intent;
     private PendingIntent pi;
@@ -76,8 +76,8 @@ public class PendingIntentTest {
         assertNotNull(pi1);
         assertEquals(pi, pi1);
         assertEquals(pi.hashCode(), pi1.hashCode());
-    }
 
+    }
 
 
 }
