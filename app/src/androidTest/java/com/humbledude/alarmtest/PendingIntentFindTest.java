@@ -10,6 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.*;
 
 /**
@@ -23,6 +26,8 @@ public class PendingIntentFindTest {
     private Context context;
     private Intent intent;
     private PendingIntent pi;
+    private PendingIntent pi_oneshot;
+
 
 
     @Before
@@ -32,6 +37,8 @@ public class PendingIntentFindTest {
         intent.putExtra("key_test", "value_test");
 
         pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+        pi_oneshot = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT);
+
     }
 
     @Test
@@ -79,5 +86,13 @@ public class PendingIntentFindTest {
 
     }
 
+    @Test
+    public void pendingIntentTest_FLAG_NO_CREATE_find5() {
+        Intent i = new Intent(context, MainReceiver.class);
+
+        // oneshot 으로 만든거는 못찾는다.
+        PendingIntent pi1 = PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_NO_CREATE);
+        assertNull(pi1);
+    }
 
 }

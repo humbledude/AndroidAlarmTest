@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         test_case1();
         test_case2();
         test_case3();
+        test_case4();
+
     }
 
 
@@ -89,6 +91,23 @@ public class MainActivity extends AppCompatActivity {
         mPendingIntentList.add(index, PendingIntent.getBroadcast(getApplicationContext(), index, mIntentList.get(index), 0));
 
         mIntentList.get(index).putExtra("key_test", "test from main activity, index = 3, extra changed");
+        mPendingIntentList.add(index, PendingIntent.getBroadcast(getApplicationContext(), index, mIntentList.get(index), PendingIntent.FLAG_UPDATE_CURRENT));
+
+        try {
+            mPendingIntentList.get(index).send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // oneshot의 extra 를 바꾸는 케이스 : 잘동작함
+    public void test_case4() {
+        int index = 4;
+        mIntentList.add(index, new Intent(getApplicationContext(), MainReceiver.class));
+        mIntentList.get(index).putExtra("key_test", "test from main activity, index = 4");
+        mPendingIntentList.add(index, PendingIntent.getBroadcast(getApplicationContext(), index, mIntentList.get(index), PendingIntent.FLAG_ONE_SHOT));
+
+        mIntentList.get(index).putExtra("key_test", "test from main activity, index = 4, oneshot extra changed");
         mPendingIntentList.add(index, PendingIntent.getBroadcast(getApplicationContext(), index, mIntentList.get(index), PendingIntent.FLAG_UPDATE_CURRENT));
 
         try {

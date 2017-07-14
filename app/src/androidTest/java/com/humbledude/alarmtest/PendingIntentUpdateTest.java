@@ -63,8 +63,4 @@ public class PendingIntentUpdateTest {
         assertEquals(pi.hashCode(), pi1.hashCode());
     }
 
-
-
-
-
 }
