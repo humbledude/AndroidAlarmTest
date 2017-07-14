@@ -11,9 +11,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".MainReceiver" android:exported="true">
-
-        </receiver>
+        <receiver android:name=".MainReceiver" android:exported="true" />
+        <receiver android:name=".MainReceiver2" android:exported="true" />
     </application>
 
 </manifest>

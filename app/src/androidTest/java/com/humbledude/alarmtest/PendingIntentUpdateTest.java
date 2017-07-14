@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +21,9 @@ import static junit.framework.Assert.assertTrue;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class PendingIntentCancelTest {
+public class PendingIntentUpdateTest {
 
-    private static final String TAG = PendingIntentCancelTest.class.getSimpleName();
+    private static final String TAG = PendingIntentUpdateTest.class.getSimpleName();
     private Context context;
     private Intent intent;
     private PendingIntent pi;
@@ -40,35 +39,29 @@ public class PendingIntentCancelTest {
     }
 
     @Test
-    public void cancel1() throws PendingIntent.CanceledException {
-        // pendingIntent 찾아와서 cancel 하면 해당 pendingIntent 를 다시 찾아올 수 없음
-        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+    public void update_extra1() {
+        intent.putExtra("key_test", "extra value is changed");
+
+        // 기존 intent 에 extra 만 바꿔서 UPDATE 했는데, 잘됨.
+        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         assertNotNull(pi1);
         assertEquals(pi, pi1);
         assertEquals(pi.hashCode(), pi1.hashCode());
-
-        // 이미 send 한담에 cancel 해도 send 한 동작은 실행됨. 다만 FLAG_NO_CREATE 로 찾을수는 없음.
-        pi1.send();
-        pi.cancel();
-
-        PendingIntent pi2 = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
-        assertNull(pi2);
     }
 
-    @Test(expected = PendingIntent.CanceledException.class)
-    public void cancel2() throws PendingIntent.CanceledException {
-        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+    @Test
+    public void update_extra2() {
+        Intent intent2 = new Intent(context, MainReceiver.class);
+        intent2.putExtra("key_test", "extra value is changed");
+
+        // intent instance 를 새로 만들어서 extra 만 바꿔서 UPDATE 했는데, 잘됨.
+        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+
         assertNotNull(pi1);
         assertEquals(pi, pi1);
         assertEquals(pi.hashCode(), pi1.hashCode());
-        pi1.cancel();
-
-        // cancel 된 pi 를 보내면 CanceledException 발생
-        pi.send();
     }
-
-
-
 
 
 
