@@ -63,4 +63,17 @@ public class PendingIntentUpdateTest {
         assertEquals(pi.hashCode(), pi1.hashCode());
     }
 
+    @Test
+    public void update_extra3() {
+        Intent intent3 = new Intent(context, MainReceiver.class);
+        intent3.putExtra("key_test", "extra value is changed");
+
+        // CANCEL 은 extra가 업데이트된 PI 자체를 새로 만드는 거임.
+        PendingIntent pi1 = PendingIntent.getBroadcast(context, 0, intent3, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        assertNotNull(pi1);
+        assertNotSame(pi, pi1);
+        assertNotSame(pi.hashCode(), pi1.hashCode());
+    }
+
 }

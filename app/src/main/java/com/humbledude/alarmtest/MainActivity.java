@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.e(TAG, "onResume()");
 
+        mIntentList.clear();
+        mPendingIntentList.clear();
+
         test_case0();
         test_case1();
         test_case2();
