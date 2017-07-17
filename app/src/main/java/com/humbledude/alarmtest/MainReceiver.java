@@ -17,34 +17,17 @@ import java.util.Set;
 public class MainReceiver extends BroadcastReceiver {
     private static final String TAG = MainReceiver.class.getSimpleName();
 
-    private static MainReceiver INSTANCE;
-
-    public Set<String> valueSet = new HashSet<>();
-
-    public MainReceiver() {
-        INSTANCE = this;
-    }
+    public static Set<String> valueSet = new HashSet<>();
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e(TAG, "onReceive : " + intent.toString());
 
-        synchronized (MainReceiver.class) {
-            if (INSTANCE == null) {
-                INSTANCE = this;
-            }
-        }
-
         if (intent.hasExtra("key_test")) {
             String valTest = intent.getStringExtra("key_test");
             Log.e(TAG, "key_test : " + valTest);
             valueSet.add(valTest);
         }
-    }
-
-
-    public static MainReceiver getInstance() {
-        return INSTANCE;
     }
 }

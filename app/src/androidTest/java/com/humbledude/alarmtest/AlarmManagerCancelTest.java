@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -27,8 +28,8 @@ import static junit.framework.Assert.assertTrue;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class AlarmManagerSetTest {
-    private static final String TAG = AlarmManagerSetTest.class.getSimpleName();
+public class AlarmManagerCancelTest {
+    private static final String TAG = AlarmManagerCancelTest.class.getSimpleName();
 
     private static final String TEST = "value_test";
     private Context context;
@@ -55,6 +56,12 @@ public class AlarmManagerSetTest {
         setAlarm(1, 60);
         setAlarm(2, 90);
 
+        // 알람을 취소할때는 AlarmManager.cancel() 만 하면 됨.
+        cancelAlarm(0);
+        cancelAlarm(1);
+        cancelAlarm(2);
+
+
         boolean clear = false;
         long count = 0;
         long maxCount = 100 * DateUtils.SECOND_IN_MILLIS;
@@ -72,7 +79,7 @@ public class AlarmManagerSetTest {
 
         Log.e(TAG, "it took " + count/1000L + " sec");
 
-        assertTrue(clear);
+        assertFalse(clear);
 
     }
 
@@ -80,13 +87,21 @@ public class AlarmManagerSetTest {
     private void setAlarm(int code, int secLater) {
         intent.putExtra("key_test", TEST + code);
         long triggerTime = System.currentTimeMillis() + secLater * DateUtils.SECOND_IN_MILLIS;
-        Log.i(TAG, "test" + code + " : " + triggerTime + " / "  + format.format(new Date(triggerTime)));
+        Log.i(TAG, "test" + code + " : " + triggerTime + " /  "  + format.format(new Date(triggerTime)));
         PendingIntent pi = PendingIntent.getBroadcast(context, code, intent, 0);
         //        mAlarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pi);
-//                mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pi);
+        //        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pi);
         mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pi);
         checkMap.put(TEST + code, false);
     }
+
+    private void cancelAlarm(int code) {
+        // extra 는 PI 를 가져올때 고려 대상이 아님
+//        intent.putExtra("key_test", TEST + code);
+        PendingIntent pi = PendingIntent.getBroadcast(context, code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mAlarmManager.cancel(pi);
+    }
+
 
     private boolean checkAlarm(int code, long count) {
         if (MainReceiver.valueSet.contains(TEST + code)) {
